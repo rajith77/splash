@@ -20,27 +20,58 @@
  */
 package org.splash.messaging;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Provides a handle for tracking outgoing messages.
  */
 public interface Tracker
 {
-    /**
-     * The current state of the Tracker.
-     */
-    public TrackerState getState();
+    static final int CUMULATIVE = 0x01;
 
     /**
-     * Blocks until the delivery state changes from {@link TrackerState#UNKNOWN}
-     * to any of the other states.
+     * The current state of the message delivery tracked by this tracker.
+     * 
+     * @return TrackerState
      */
-    public void awaitSettlement();
+    public DeliveryState getState();
 
     /**
-     * If SenderMode is {@link OutboundLinkMode#AT_MOST_ONCE}, this will return true
-     * as soon as the message is sent. <br>
-     * If SenderMode is {@link OutboundLinkMode#AT_LEAST_ONCE}, this will return true
-     * when the remote peer settles the delivery.
+     * The current known disposition of the message tracked by this tracker.
+     * 
+     * @return TrackerState
+     */
+    public MessageDisposition getDisposition();
+
+    /**
+     * Blocks until the message is marked settled or the associated link reaches
+     * an erroneous state.
+     * 
+     * @param flags
+     *            : If {@link Tracker#CUMULATIVE} is specified, this will block
+     *            until all deliveries up to this point is marked settled.
+     */
+    public void awaitSettlement(int... flags);
+
+    /**
+     * Blocks for the duration of the timeout and throws a TimeoutException
+     * unless the message is marked settled or the associated link reaches an
+     * erroneous state, before the time limit expires.
+     * 
+     * @param timeout
+     * @param unit
+     * @param flags
+     *            : If {@link Tracker#CUMULATIVE} is specified, this will block
+     *            until all deliveries up to this point is marked settled.
+     * @throws TimeoutException
+     */
+    public void awaitSettlement(long timeout, TimeUnit unit, int... flags) throws TimeoutException;
+
+    /**
+     * If OutboundLinkMode is {@link OutboundLinkMode#AT_MOST_ONCE}, this will
+     * return true as soon as the message is sent. <br>
+     * If SenderMode is {@link OutboundLinkMode#AT_LEAST_ONCE}, this will return
+     * true when the remote peer settles the delivery.
      */
     public boolean isSettled();
 }

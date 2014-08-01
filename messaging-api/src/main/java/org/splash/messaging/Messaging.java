@@ -21,7 +21,7 @@ package org.splash.messaging;
  */
 
 /**
- * Provides an entry point for using the messaging library.
+ * Provides an entry point for using the messaging API.
  * It provides several methods for obtaining a connection which can then
  * be used to create the appropriate constructs to send and receive messages.
  * 
@@ -56,11 +56,10 @@ public class Messaging
     {
         try
         {
-            Class<? extends MessagingFactory> clazz = Class
-                    .forName(
-                            System.getProperty("splash.messaging.impl",
-                                    "org.splash.messaging.amqp.proton.MessagingFactoryImpl")).asSubclass(
-                            MessagingFactory.class);
+            Class<? extends MessagingFactory> clazz = Class.forName(
+                    System.getProperty("splash.messaging.factory",
+                            "org.splash.messaging.amqp.proton.MessagingFactoryImpl"))
+                    .asSubclass(MessagingFactory.class);
             MESSAGING_FACTORY = clazz.newInstance();
         }
         catch (Exception e)
@@ -85,61 +84,93 @@ public class Messaging
     }
 
     /**
-     * Constructs a Connection object with the given URL. <br>
-     * This does not establish the underlying physical connection. The
-     * application needs to call connect() in order to establish the physical
-     * connection to the peer.
+     * Connects to the remote peer identified by the given URL.
      * 
-     * @see Connection#connect()
+     * @param url
+     *            : See above for URL formats.
+     * @param handlers
+     *            : The handler(s) responsible for handling messaging events. @see
+     *            EventHandler
+     * @return : Connection
+     * @throws MessagingException
+     * @throws NetworkException
      */
-    public static Connection connect(String url)
+    public static Connection connect(String url, EventHandler... handlers) throws MessagingException, NetworkException
     {
-        return MESSAGING_FACTORY.connect(url);
+        return MESSAGING_FACTORY.connect(url, handlers);
     }
 
     /**
-     * Constructs a Connection object with the given host and port. <br>
-     * This does not establish the underlying physical connection. The
-     * application needs to call connect() in order to establish the physical
-     * connection to the peer.
+     * Connects to the remote peer identified by the host, port combination.
      * 
-     * @see Connection#connect()
+     * @param host
+     * @param port
+     * @param handlers
+     *            : The handler(s) responsible for handling messaging events. @see
+     *            EventHandler
+     * @return : Connection
+     * @throws MessagingException
+     * @throws NetworkException
      */
-    public static Connection connect(String host, int port)
+    public static Connection connect(String host, int port, EventHandler... handlers) throws MessagingException,
+            NetworkException
     {
-        return MESSAGING_FACTORY.connect(host, port);
+        return MESSAGING_FACTORY.connect(host, port, handlers);
     }
 
     /**
-     * Constructs a Connection object with the given ConnectionSettings.
+     * Connects to the remote peer identified by the given @see
+     * ConnectionSettings.
      * 
-     * @see ConnectionSettings This does not establish the underlying physical
-     *      connection. The application needs to call connect() in order to
-     *      establish the physical connection to the peer.
-     * @see Connection#connect()
+     * @param url
+     *            : See above for URL formats.
+     * @param handlers
+     *            : The handler(s) responsible for handling messaging events. @see
+     *            EventHandler
+     * @return : Connection
+     * @throws MessagingException
+     * @throws NetworkException
      */
-    public static Connection connect(ConnectionSettings settings)
+    public static Connection connect(ConnectionSettings settings, EventHandler... handlers) throws MessagingException,
+            NetworkException
     {
-        return MESSAGING_FACTORY.connect(settings);
+        return MESSAGING_FACTORY.connect(settings, handlers);
     }
 
     /**
-     * Constructs an InboundConnector for accepting inbound connections.
+     * Binds to the socket identified by the host:port given in the @see
+     * ConnectionSettings and listens for incoming messages.
      * 
-     * @see InboundConnector
+     * @param settings
+     * @param handlers
+     *            : The handler(s) responsible for handling messaging events. @see
+     *            EventHandler
+     * @return Server
+     * @throws MessagingException
+     * @throws NetworkException
      */
-    public static Server server(ConnectionSettings settings)
+    public static Server server(ConnectionSettings settings, EventHandler... handlers) throws MessagingException,
+            NetworkException
     {
-        return MESSAGING_FACTORY.server(settings);
+        return MESSAGING_FACTORY.server(settings, handlers);
     }
 
     /**
-     * Constructs an InboundConnector for accepting inbound connections.
+     * Binds to the socket identified by the host:port and listens for incoming
+     * messages.
      * 
-     * @see InboundConnector
+     * @param host
+     * @param port
+     * @param handlers
+     *            : The handler(s) responsible for handling messaging events. @see
+     *            EventHandler
+     * @return Server
+     * @throws MessagingException
+     * @throws NetworkException
      */
-    public static Server sever(String host, int port)
+    public static Server sever(String host, int port, EventHandler... handlers) throws MessagingException,
+            NetworkException
     {
-        return MESSAGING_FACTORY.server(host, port);
+        return MESSAGING_FACTORY.server(host, port, handlers);
     }
 }

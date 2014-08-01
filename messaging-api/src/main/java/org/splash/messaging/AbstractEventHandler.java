@@ -1,4 +1,3 @@
-package org.splash.messaging;
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,6 +18,7 @@ package org.splash.messaging;
  * under the License.
  *
  */
+package org.splash.messaging;
 
 public class AbstractEventHandler implements EventHandler
 {

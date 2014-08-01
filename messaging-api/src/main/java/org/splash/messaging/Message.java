@@ -25,23 +25,25 @@ import java.util.Map;
 /**
  * Provides a representation of a <i>Message</i>.
  * 
- * <h4>For Sending</h4> The application can use {@link Messaging#message()} to
- * create a message that can be used or sending. To set the content use
+ * <h4>For Sending</h4> The application could use {@link Messaging#message()} to
+ * create a message that can be used for sending. To set the content use
  * {@link Message#setContent(Object)} and the various setter method for setting
  * message properties.
  * 
  * <pre>
- * {@code
- * Message m = Messaging.message();
- * m.setAddress("foo/bar");
- * m.setContent("Hello World");
+ * {
+ *     &#064;code
+ *     Message m = Messaging.message();
+ *     m.setAddress(&quot;foo/bar&quot;);
+ *     m.setContent(&quot;Hello World&quot;);
  * }
  * </pre>
  * 
  * <h4>Receiving</h4> The application can use {@link Message#getContent()} for
- * getting the content and the various get methods for accessing the message
+ * getting the content and the various getter methods for accessing the message
  * properties.
  */
+@SuppressWarnings("rawtypes")
 public interface Message
 {
     short DEFAULT_PRIORITY = 4;

@@ -21,9 +21,9 @@
 package org.splash.messaging;
 
 /**
- * Outgoing message-delivery state
+ * Outgoing message disposition
  */
-public enum TrackerState
+public enum MessageDisposition
 {
     /**
      * Message has been accepted by the remote peer.
@@ -41,18 +41,7 @@ public enum TrackerState
     RELEASED,
 
     /**
-     * Delivery is still pending and the state is not known.
+     * Disposition is not known.
      */
-    UNKNOWN,
-
-    /**
-     * The link has failed and the message is in-doubt.
-     */
-    LINK_FAILED,
-
-    /**
-     * The application or the remote peer has closed the link. The state of
-     * the delivery is unknown.
-     */
-    LINK_CLOSED
+    UNKNOWN
 }

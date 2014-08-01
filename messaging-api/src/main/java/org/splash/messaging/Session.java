@@ -34,11 +34,10 @@ package org.splash.messaging;
 public interface Session
 {
     /**
-     * Flag for use with {@link Session#accept(Message, int...)},
-     * {@link Session#reject(Message, int...)} and
-     * {@link Session#release(Message, int...)} methods. When used with the
-     * above methods, all messages upto that point will be affected by the given
-     * action.
+     * If used with
+     * {@link Session#disposition(Message, MessageDisposition, int...)} or
+     * {@link Session#settle(Message, int...)} it will apply the 'action' to all
+     * messages received up to the given message.
      */
     static final int CUMULATIVE = 0x01;
 
@@ -76,20 +75,22 @@ public interface Session
             MessagingException;
 
     /**
-     * Establishes a logical Link with the remote peer for receiving messages
-     * from the specified address.
+     * Sets the disposition for the given message or all messages received up to
+     * the given message, if the {@link Session#CUMULATIVE} flag is used.
      * 
-     * @param address
-     *            The address is an arbitrary string identifying a logical
-     *            "message source" within the remote peer
-     * @param mode
-     *            The ReceiverMode specifies the level of reliability expected
-     *            by the application.
-     * @param creditMode
-     *            The CreditMode specifies how credit is replenished.
-     * @see InboundLinkMode
-     * @see CreditMode
+     * @param msg
+     * @param disposition
      */
+    void disposition(Message msg, MessageDisposition disposition, int... flags);
+
+    /**
+     * Settles the given message or all messages received up to the given
+     * message, if the {@link Session#CUMULATIVE} flag is used.
+     * 
+     * @param msg
+     * @param disposition
+     */
+    void settle(Message msg, int... flags);
 
     /**
      * Accepts the inbound Session.

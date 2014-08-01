@@ -1,4 +1,3 @@
-package org.splash.messaging;
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -19,18 +18,31 @@ package org.splash.messaging;
  * under the License.
  *
  */
+package org.splash.messaging;
 
-public interface MessagingFactory
+/**
+ * Outgoing message-delivery state
+ */
+public enum DeliveryState
 {
-    Message message();
+    /**
+     * Message has been settled by the remote peer.
+     */
+    SETTLED,
 
-    Connection connect(String url, EventHandler ... handlers) throws MessagingException, NetworkException;
+    /**
+     * Delivery is still pending and the state is not known.
+     */
+    UNKNOWN,
 
-    Connection connect(String host, int port,  EventHandler ... handlers) throws MessagingException, NetworkException;
+    /**
+     * The link has failed and the message is in-doubt.
+     */
+    LINK_FAILED,
 
-    Connection connect(ConnectionSettings settings, EventHandler ... handlers) throws MessagingException, NetworkException;
-
-    Server server(ConnectionSettings settings, EventHandler ... handlers) throws MessagingException, NetworkException;
-
-    Server server(String host, int port, EventHandler ... handlers) throws MessagingException, NetworkException;
+    /**
+     * The application or the remote peer has closed the link. The state of the
+     * delivery is unknown.
+     */
+    LINK_CLOSED
 }
