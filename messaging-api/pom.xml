@@ -20,8 +20,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
-  <dependencyManagement>
-  <dependencies>
+ <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -38,8 +37,7 @@
         <artifactId>slf4j-log4j12</artifactId>
          <version>1.7.6</version>
     </dependency>
-  </dependencies>
-  </dependencyManagement>
+ </dependencies>
 
   <reporting>
     <plugins>
