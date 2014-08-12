@@ -22,7 +22,7 @@ package org.splash.messaging;
 
 /**
  * 
- * Represents a Server for receiving <i>inbound connections</i> from remote
+ * Handler for the server socket for receiving <i>inbound connections</i> from remote
  * peers within a messaging network.
  * 
  * <h4>Exceptions</h4>

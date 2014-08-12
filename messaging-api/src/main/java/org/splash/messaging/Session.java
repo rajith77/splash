@@ -31,7 +31,7 @@ package org.splash.messaging;
  * <li>MessagingException : Thrown when the Session gets to an erroneous state.</li>
  * </ul>
  */
-public interface Session
+public interface Session extends ContextAware
 {
     /**
      * If used with
@@ -41,6 +41,7 @@ public interface Session
      */
     static final int CUMULATIVE = 0x01;
 
+    static final int SETTLE = 0x02;
     /**
      * Establishes a logical <u>Outbound Link</u> with the remote peer for
      * sending messages to the specified destination identified by the address.
@@ -81,7 +82,7 @@ public interface Session
      * @param msg
      * @param disposition
      */
-    void disposition(Message msg, MessageDisposition disposition, int... flags);
+    void disposition(Message msg, MessageDisposition disposition, int... flags) throws MessageFormatException, MessagingException;
 
     /**
      * Settles the given message or all messages received up to the given
@@ -90,27 +91,7 @@ public interface Session
      * @param msg
      * @param disposition
      */
-    void settle(Message msg, int... flags);
-
-    /**
-     * Accepts the inbound Session.
-     * 
-     * @exception UnsupportedOperationException
-     *                will be thrown if the connection is not an inbound
-     *                Session.
-     */
-    void accept();
-
-    /**
-     * Rejects by closing the session. This is useful if the application is
-     * unable to accept any new sessions at this point. It will provide a
-     * reason-code if the underlying protocol supports it.
-     * 
-     * @exception UnsupportedOperationException
-     *                will be thrown if the connection is not an inbound
-     *                session.
-     */
-    void reject(ReasonCode code, String desc);
+    void settle(Message msg, int... flags) throws MessageFormatException, MessagingException;
 
     /**
      * Terminates the Session and free any resources associated with this

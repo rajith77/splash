@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Provides a handle for tracking outgoing messages.
  */
-public interface Tracker
+public interface Tracker extends ContextAware
 {
     static final int CUMULATIVE = 0x01;
 
@@ -50,8 +50,11 @@ public interface Tracker
      * @param flags
      *            : If {@link Tracker#CUMULATIVE} is specified, this will block
      *            until all deliveries up to this point is marked settled.
+     * 
+     * @throws MessagingException
+     *             If the underlying connection failed.
      */
-    public void awaitSettlement(int... flags);
+    public void awaitSettlement(int... flags) throws MessagingException;
 
     /**
      * Blocks for the duration of the timeout and throws a TimeoutException
@@ -63,9 +66,11 @@ public interface Tracker
      * @param flags
      *            : If {@link Tracker#CUMULATIVE} is specified, this will block
      *            until all deliveries up to this point is marked settled.
+     * @throws MessagingException
+     *             If the underlying connection failed.
      * @throws TimeoutException
      */
-    public void awaitSettlement(long timeout, TimeUnit unit, int... flags) throws TimeoutException;
+    public void awaitSettlement(long timeout, TimeUnit unit, int... flags) throws MessagingException, TimeoutException;
 
     /**
      * If OutboundLinkMode is {@link OutboundLinkMode#AT_MOST_ONCE}, this will

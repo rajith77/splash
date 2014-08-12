@@ -36,13 +36,8 @@ public enum DeliveryState
     UNKNOWN,
 
     /**
-     * The link has failed and the message is in-doubt.
+     * The link has failed due to the underlying network connection failure. The
+     * message associated with this delivery is in-doubt.
      */
-    LINK_FAILED,
-
-    /**
-     * The application or the remote peer has closed the link. The state of the
-     * delivery is unknown.
-     */
-    LINK_CLOSED
+    LINK_FAILED
 }

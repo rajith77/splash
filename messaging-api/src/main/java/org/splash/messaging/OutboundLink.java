@@ -52,7 +52,7 @@ package org.splash.messaging;
  * <li>MessagingException : Thrown when the link gets to an erroneous state.</li>
  * </ul>
  */
-public interface OutboundLink
+public interface OutboundLink extends ContextAware
 {
     /**
      * The address used for establishing the Link
@@ -68,7 +68,7 @@ public interface OutboundLink
      * Outstanding message deliveries that the peer has not yet confirmed as
      * settled.
      */
-    int getUnsettled() throws MessagingException, NetworkException;
+    int getUnsettled() throws MessagingException;
 
     /**
      * 

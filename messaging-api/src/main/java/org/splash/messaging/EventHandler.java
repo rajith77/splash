@@ -22,19 +22,21 @@ package org.splash.messaging;
 
 public interface EventHandler
 {
-    void onConnection(Connection con);
-
-    void onConnectionClosed(Connection conn);
+    void onNetworkConnection(Connection conn, Action action);
 
     void onNetworkFailed(Connection conn, NetworkException exp);
 
     void onNetworkReconnected(Connection conn);
 
-    void onSession(Session ssn);
+    void onConnectionOpen(Connection con);
+
+    void onConnectionClosed(Connection conn);
+
+    void onSession(Session ssn, Action action);
 
     void onSessionClosed(Session ssn);
 
-    void onOutboundLink(OutboundLink link);
+    void onOutboundLink(OutboundLink link, Action action);
 
     void onOutboundLinkClosed(OutboundLink link);
 
@@ -42,11 +44,9 @@ public interface EventHandler
 
     void onClearToSend(OutboundLink link);
 
-    void onDispositionChange(Tracker tracker);
-
     void onSettled(Tracker tracker);
 
-    void onInboundLink(InboundLink link);
+    void onInboundLink(InboundLink link, Action action);
 
     void onInboundLinkClosed(InboundLink link);
 

@@ -36,7 +36,7 @@ package org.splash.messaging;
  * <h4>How To Set Message Credits</h4> When the InboundLink is created the
  * default message credits is determined based on it's CreditMode. <br>
  * If {@link CreditMode#AUTO} is used it will be set to "1". This can be changed
- * via the system property "splash.inboundlink.defaukt.credits". <br>
+ * via the system property "splash.default.credits". <br>
  * If {@link CreditMode#EXPLICT} is used it will be set to "0".
  * 
  * Once the InboundLink is created it can explicitly specify message credits
@@ -72,7 +72,7 @@ package org.splash.messaging;
  * state.</li>
  * </ul>
  */
-public interface InboundLink
+public interface InboundLink extends ContextAware
 {
     /**
      * @return The address used for establishing the Link
@@ -89,7 +89,7 @@ public interface InboundLink
      * @return The number of messages received by the application but has not
      *         yet been settled.
      */
-    int getUnsettled();
+    int getUnsettled() throws MessagingException;
 
     /**
      * Sets the message credits for the InboundLink. The credits should be a non

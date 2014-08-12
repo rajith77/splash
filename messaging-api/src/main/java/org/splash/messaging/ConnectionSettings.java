@@ -24,60 +24,123 @@ package org.splash.messaging;
  * Applications could extend this class to provide their own implementation of
  * the ConnectionSettings based on their configuration.
  */
-public abstract class ConnectionSettings
+public class ConnectionSettings
 {
-    protected String _scheme = "amqp";
+    protected String scheme = "amqp";
 
-    protected String _host = "localhost";
+    protected String host = "localhost";
 
-    protected int _port = 5672;
+    protected int port = 5672;
 
-    protected String _user = "";
+    protected String user = "";
 
-    protected String _pass = "";
+    protected String pass = "";
 
-    protected boolean _tcpNodelay = false;
+    protected String id = null;
 
-    protected int _readBufferSize = 65535;
+    protected boolean tcpNodelay = false;
 
-    protected int _writeBufferSize = 65535;
+    protected int readBufferSize = 65535;
 
-    protected long _connectTimeout = Long.getLong("splash.connection.timeout", 60000);
+    protected int writeBufferSize = 65535;
 
-    protected long _idleTimeout = Long.getLong("splash.connection.idle_timeout", 60000);
+    protected long connectTimeout = Long.getLong("splash.connection.timeout", 60000);
+
+    protected long idleTimeout = Long.getLong("splash.connection.idle_timeout", 60000);
+
+    public void setScheme(String scheme)
+    {
+        this.scheme = scheme;
+    }
+
+    public void setHost(String host)
+    {
+        this.host = host;
+    }
+
+    public void setPort(int port)
+    {
+        this.port = port;
+    }
+
+    public void setUser(String user)
+    {
+        this.user = user;
+    }
+
+    public void setPass(String pass)
+    {
+        this.pass = pass;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public void setTcpNodelay(boolean tcpNodelay)
+    {
+        this.tcpNodelay = tcpNodelay;
+    }
+
+    public void setReadBufferSize(int readBufferSize)
+    {
+        this.readBufferSize = readBufferSize;
+    }
+
+    public void setWriteBufferSize(int writeBufferSize)
+    {
+        this.writeBufferSize = writeBufferSize;
+    }
+
+    public void setConnectTimeout(long connectTimeout)
+    {
+        this.connectTimeout = connectTimeout;
+    }
+
+    public void setIdleTimeout(long idleTimeout)
+    {
+        this.idleTimeout = idleTimeout;
+    }
 
     public String getHost()
     {
-        return _host;
+        return host;
     }
 
     public int getPort()
     {
-        return _port;
+        return port;
+    }
+
+    public String getId()
+    {
+        return id;
     }
 
     public boolean isTcpNodelay()
     {
-        return _tcpNodelay;
+        return tcpNodelay;
     }
 
     public int getReadBufferSize()
     {
-        return _readBufferSize;
+        return readBufferSize;
     }
 
     public int getWriteBufferSize()
     {
-        return _writeBufferSize;
+        return writeBufferSize;
     }
 
     public long getConnectTimeout()
     {
-        return _connectTimeout;
+        return connectTimeout;
     }
 
     public long getIdleTimeout()
     {
-        return _idleTimeout;
+        return idleTimeout;
     }
+
 }

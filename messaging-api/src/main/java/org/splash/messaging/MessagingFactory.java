@@ -30,7 +30,7 @@ public interface MessagingFactory
 
     Connection connect(ConnectionSettings settings, EventHandler ... handlers) throws MessagingException, NetworkException;
 
-    Server server(ConnectionSettings settings, EventHandler ... handlers) throws MessagingException, NetworkException;
+    Server listen(ConnectionSettings settings, EventHandler ... handlers) throws MessagingException, NetworkException;
 
-    Server server(String host, int port, EventHandler ... handlers) throws MessagingException, NetworkException;
+    Server listen(String host, int port, EventHandler ... handlers) throws MessagingException, NetworkException;
 }

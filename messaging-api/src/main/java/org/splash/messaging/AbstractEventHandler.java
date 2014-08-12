@@ -22,12 +22,6 @@ package org.splash.messaging;
 
 public class AbstractEventHandler implements EventHandler
 {
-
-    @Override
-    public void onConnection(Connection con)
-    {
-    }
-
     @Override
     public void onConnectionClosed(Connection conn)
     {
@@ -44,17 +38,7 @@ public class AbstractEventHandler implements EventHandler
     }
 
     @Override
-    public void onSession(Session ssn)
-    {
-    }
-
-    @Override
     public void onSessionClosed(Session ssn)
-    {
-    }
-
-    @Override
-    public void onOutboundLink(OutboundLink link)
     {
     }
 
@@ -74,17 +58,7 @@ public class AbstractEventHandler implements EventHandler
     }
 
     @Override
-    public void onDispositionChange(Tracker tracker)
-    {
-    }
-
-    @Override
     public void onSettled(Tracker tracker)
-    {
-    }
-
-    @Override
-    public void onInboundLink(InboundLink link)
     {
     }
 
@@ -100,6 +74,31 @@ public class AbstractEventHandler implements EventHandler
 
     @Override
     public void onMessage(InboundLink link, Message msg)
+    {
+    }
+
+    @Override
+    public void onConnectionOpen(Connection con)
+    {
+    }
+
+    @Override
+    public void onNetworkConnection(Connection conn, Action action)
+    {
+    }
+
+    @Override
+    public void onSession(Session ssn, Action action)
+    {
+    }
+
+    @Override
+    public void onOutboundLink(OutboundLink link, Action action)
+    {
+    }
+
+    @Override
+    public void onInboundLink(InboundLink link, Action action)
     {
     }
 }

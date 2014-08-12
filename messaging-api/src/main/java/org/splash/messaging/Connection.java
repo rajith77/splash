@@ -39,13 +39,8 @@ package org.splash.messaging;
  * 
  * @see ConnectionSettings
  */
-public interface Connection
+public interface Connection extends ContextAware
 {
-    /**
-     * An ID set by the application to identify the connection.
-     */
-    void setLocalID(String id);
-
     /**
      * Retrieve the local identifier set by the application
      */
@@ -67,28 +62,6 @@ public interface Connection
      * Establishes a logical Session for exchanging of messages.
      */
     Session createSession() throws NetworkException, MessagingException, TimeoutException;
-
-    /**
-     * Accepts the inbound connection.
-     * 
-     * @exception UnsupportedOperationException
-     *                will be thrown if the connection is not an inbound
-     *                connection.
-     */
-    void accept();
-
-    /**
-     * Rejects by closing the connection. This is useful if the application is
-     * unable to accept any new connections at this point. It will provide a
-     * reason-code if the underlying protocol supports it.
-     * 
-     * Optionally, it could provide an alternate address to connect to.
-     * 
-     * @exception UnsupportedOperationException
-     *                will be thrown if the connection is not an inbound
-     *                connection.
-     */
-    void reject(ReasonCode code, String desc, String alternateAddress);
 
     /**
      * Terminates the Connection and free any resources associated with this

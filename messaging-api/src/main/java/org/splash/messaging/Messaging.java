@@ -22,7 +22,8 @@ package org.splash.messaging;
 
 /**
  * Provides an entry point for using the messaging API.
- * It provides several methods for obtaining a connection which can then
+ * It provides several methods for obtaining a connection 
+ * or listening for connections which could then
  * be used to create the appropriate constructs to send and receive messages.
  * 
  * It also acts as a factory for Message objects.
@@ -58,7 +59,7 @@ public class Messaging
         {
             Class<? extends MessagingFactory> clazz = Class.forName(
                     System.getProperty("splash.messaging.factory",
-                            "org.splash.messaging.amqp.proton.MessagingFactoryImpl"))
+                            "org.splash.messaging.amqp.proton.DefaultMessagingFactory"))
                     .asSubclass(MessagingFactory.class);
             MESSAGING_FACTORY = clazz.newInstance();
         }
@@ -149,10 +150,10 @@ public class Messaging
      * @throws MessagingException
      * @throws NetworkException
      */
-    public static Server server(ConnectionSettings settings, EventHandler... handlers) throws MessagingException,
+    public static Server listen(ConnectionSettings settings, EventHandler... handlers) throws MessagingException,
             NetworkException
     {
-        return MESSAGING_FACTORY.server(settings, handlers);
+        return MESSAGING_FACTORY.listen(settings, handlers);
     }
 
     /**
@@ -168,9 +169,9 @@ public class Messaging
      * @throws MessagingException
      * @throws NetworkException
      */
-    public static Server sever(String host, int port, EventHandler... handlers) throws MessagingException,
+    public static Server listen(String host, int port, EventHandler... handlers) throws MessagingException,
             NetworkException
     {
-        return MESSAGING_FACTORY.server(host, port, handlers);
+        return MESSAGING_FACTORY.listen(host, port, handlers);
     }
 }
