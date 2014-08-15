@@ -1,4 +1,3 @@
-package org.splash.messaging;
 /*
  *
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -20,6 +19,7 @@ package org.splash.messaging;
  *
  */
 
+package org.splash.messaging;
 /**
  * Provides an entry point for using the messaging API.
  * It provides several methods for obtaining a connection 
@@ -59,7 +59,7 @@ public class Messaging
         {
             Class<? extends MessagingFactory> clazz = Class.forName(
                     System.getProperty("splash.messaging.factory",
-                            "org.splash.messaging.amqp.proton.DefaultMessagingFactory"))
+                            "org.splash.messaging.proton.DefaultMessagingFactory"))
                     .asSubclass(MessagingFactory.class);
             MESSAGING_FACTORY = clazz.newInstance();
         }
