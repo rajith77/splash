@@ -18,11 +18,13 @@
  * under the License.
  *
  */
-package org.splash.messaging.management;
+package org.splash.messaging.services.management;
 
-/**
- * Marker interface
- */
-public interface ManageableEntityType
+public interface ManagementNode
 {
+    String getAddress();
+
+    void registerEntity(ManageableEntity entity);
+
+    void deRegisterEntity(ManageableEntity entity);
 }

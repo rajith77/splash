@@ -45,4 +45,9 @@ public enum OpCode
     {
         return _description;
     }
+    
+    public static OpCode get(String code)
+    {
+        return Enum.valueOf(OpCode.class, code);
+    }
 }

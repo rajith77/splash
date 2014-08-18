@@ -18,23 +18,11 @@
  * under the License.
  *
  */
-package org.splash.messaging.management;
+package org.splash.messaging.services.management;
 
-import java.util.Map;
-
-public interface ManageableEntity
+/**
+ * Marker interface
+ */
+public interface ManageableEntityType
 {
-    String getName();
-    
-    String getID();
-    
-    ManageableEntityType getType();
-    
-    Map<String, Object> getAttributes();
-
-    Map<String, Object> read() throws ManagementException;
-    
-    Map<String, Object> update(Map<String, Object> attributes) throws ManagementException;
-    
-    void delete() throws ManagementException;
 }

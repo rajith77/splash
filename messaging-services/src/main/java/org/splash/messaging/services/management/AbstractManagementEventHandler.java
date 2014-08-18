@@ -1,6 +1,8 @@
-package org.splash.messaging.management;
+package org.splash.messaging.services.management;
 
 import org.splash.messaging.AbstractEventHandler;
+import org.splash.messaging.management.Request;
+import org.splash.messaging.management.Response;
 
 public class AbstractManagementEventHandler extends AbstractEventHandler implements ManagementEventHandler
 {

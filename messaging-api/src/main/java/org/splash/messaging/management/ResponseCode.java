@@ -49,4 +49,27 @@ public enum ResponseCode
     {
         return _description;
     }
+    
+    public static ResponseCode get(int code) throws ManagementException
+    {
+        switch(code)
+        {
+        case 200:
+            return OK;
+        case 201:
+            return CREATED;
+        case 204:
+            return NO_CONTENT;
+        case 400:
+            return BAD_REQUEST;
+        case 404:
+            return NOT_FOUND;
+        case 500:
+            return INTERNAL_ERROR;
+        case 501:
+            return NOT_IMPLEMENTED;
+        default:
+            throw new ManagementException(null, "Invalid response code");
+        }
+    }
 }

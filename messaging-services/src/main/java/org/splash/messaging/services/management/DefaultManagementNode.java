@@ -1,4 +1,4 @@
-package org.splash.messaging.services;
+package org.splash.messaging.services.management;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,17 +10,13 @@ import org.splash.logging.Logger;
 import org.splash.messaging.InboundLink;
 import org.splash.messaging.Message;
 import org.splash.messaging.OutboundLink;
-import org.splash.messaging.management.AbstractManagementEventHandler;
-import org.splash.messaging.management.ManageableEntity;
-import org.splash.messaging.management.ManageableEntityType;
-import org.splash.messaging.management.ManagementEventHandler;
 import org.splash.messaging.management.ManagementException;
 import org.splash.messaging.management.ManagementMessageFactory;
-import org.splash.messaging.management.ManagementNode;
 import org.splash.messaging.management.ManagementPropertyNames;
 import org.splash.messaging.management.Request;
 import org.splash.messaging.management.Response;
 import org.splash.messaging.management.ResponseCode;
+import org.splash.messaging.services.MessagingServiceException;
 
 public class DefaultManagementNode extends AbstractManagementEventHandler implements ManagementNode
 {

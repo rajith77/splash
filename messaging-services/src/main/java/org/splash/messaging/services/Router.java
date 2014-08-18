@@ -20,7 +20,7 @@
  */
 package org.splash.messaging.services;
 
-import org.splash.messaging.management.ManageableEntity;
+import org.splash.messaging.services.management.ManageableEntity;
 
 public interface Router extends ManageableEntity
 {
