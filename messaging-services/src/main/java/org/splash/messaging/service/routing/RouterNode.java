@@ -41,7 +41,9 @@ import org.splash.messaging.OutboundLinkMode;
 import org.splash.messaging.Session;
 import org.splash.messaging.Tracker;
 import org.splash.messaging.proton.InboundMessage;
+import org.splash.messaging.service.MessagingServiceException;
 import org.splash.messaging.service.management.ManageableEntity;
+import org.splash.messaging.service.management.ManageableEntityFactory;
 import org.splash.messaging.service.management.ManageableEntityLifecycleHandler;
 import org.splash.messaging.service.management.ManagementNode;
 
@@ -91,6 +93,26 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
         _outLink = _ssn.createOutboundLink(_id, OutboundLinkMode.AT_LEAST_ONCE);
         _mgtNode = ManagementNode.Factory.create();
         _mgtNode.init(_mgtLink, _outLink, this);
+
+        // Registering standard routers
+        registerRouterType(DirectMatchRouter.class, DirectMatchRouter.Factory.get());
+        registerRouterType(WildcardRouter.class, WildcardRouter.Factory.get());
+
+        // Registering standard route types
+        registerRouteType(DirectMatchRoute.class, DirectMatchRoute.Factory.get());
+        registerRouteType(WildcardRoute.class, WildcardRoute.Factory.get());
+    }
+
+    public void registerRouterType(Class<? extends Router> router, ManageableEntityFactory factory)
+            throws MessagingServiceException
+    {
+        _mgtNode.registerType(router, factory);
+    }
+
+    public void registerRouteType(Class<? extends Route> route, ManageableEntityFactory factory)
+            throws MessagingServiceException
+    {
+        _mgtNode.registerType(route, factory);
     }
 
     @Override
@@ -211,6 +233,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
         }
     }
 
+    @SuppressWarnings("unused")
     public static void main(String[] args) throws Exception
     {
         String host = System.getProperty("router.peer_host", "localhost");
