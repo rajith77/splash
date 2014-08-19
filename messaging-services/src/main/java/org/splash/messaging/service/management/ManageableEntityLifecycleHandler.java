@@ -18,45 +18,13 @@
  * under the License.
  *
  */
-package org.splash.messaging.proton;
+package org.splash.messaging.service.management;
 
-import org.apache.qpid.proton.message.Message;
-
-public class InboundMessage extends MessageImpl
+public interface ManageableEntityLifecycleHandler
 {
-    private String _ssnID;
+    void entityCreated(ManageableEntity entity);
 
-    private byte[] _deliveryTag;
+    void entityUpdated(ManageableEntity entity);
 
-    private long _sequence;
-
-    private boolean _preSettled = false;
-
-    InboundMessage(String ssnID, byte[] deliveryTag, long sequence, boolean preSettled, Message msg)
-    {
-        super(msg);
-        _ssnID = ssnID;
-        _deliveryTag = deliveryTag;
-        _sequence = sequence;
-    }
-
-    String getSessionID()
-    {
-        return _ssnID;
-    }
-
-    byte[] getDeliveryTag()
-    {
-        return _deliveryTag;
-    }
-
-    long getSequence()
-    {
-        return _sequence;
-    }
-
-    public boolean isPreSettled()
-    {
-        return _preSettled;
-    }
+    void entityDeleted(ManageableEntity entity);
 }

@@ -23,8 +23,7 @@ package org.splash.messaging.management;
 import java.util.Map;
 
 import org.splash.messaging.Message;
-import org.splash.messaging.services.MessagingServiceException;
-import org.splash.messaging.services.Router;
+import org.splash.messaging.service.MessagingServiceException;
 
 public interface ManagementMessageFactory
 {
@@ -37,7 +36,8 @@ public interface ManagementMessageFactory
         {
             try
             {
-                Class<? extends ManagementMessageFactory> c = Class.forName(className).asSubclass(ManagementMessageFactory.class);
+                Class<? extends ManagementMessageFactory> c = Class.forName(className).asSubclass(
+                        ManagementMessageFactory.class);
                 return c.newInstance();
             }
             catch (Exception e)
@@ -54,6 +54,8 @@ public interface ManagementMessageFactory
     Response parseResponse(Message m);
 
     Message response(Request req, ResponseCode code, Map<String, ? extends Object> attributes);
+
+    Message response(Request req, ResponseCode code, String desc, Map<String, ? extends Object> attributes);
 
     Message create(String name, String type, Map<String, ? extends Object> attributes);
 

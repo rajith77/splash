@@ -18,45 +18,36 @@
  * under the License.
  *
  */
-package org.splash.messaging.proton;
+package org.splash.messaging.service.management;
 
-import org.apache.qpid.proton.message.Message;
+import org.splash.messaging.management.Request;
+import org.splash.messaging.management.Response;
 
-public class InboundMessage extends MessageImpl
+public interface ManagementEventHandler
 {
-    private String _ssnID;
+    void onRequest(Request req);
 
-    private byte[] _deliveryTag;
+    void onResponse(Response res);
 
-    private long _sequence;
+    void onCreate(Request req);
 
-    private boolean _preSettled = false;
+    void onRead(Request req, ManageableEntity entity);
 
-    InboundMessage(String ssnID, byte[] deliveryTag, long sequence, boolean preSettled, Message msg)
-    {
-        super(msg);
-        _ssnID = ssnID;
-        _deliveryTag = deliveryTag;
-        _sequence = sequence;
-    }
+    void onUpdate(Request req, ManageableEntity entity);
 
-    String getSessionID()
-    {
-        return _ssnID;
-    }
+    void onDelete(Request req, ManageableEntity entity);
 
-    byte[] getDeliveryTag()
-    {
-        return _deliveryTag;
-    }
+    void onQuery(Request req);
 
-    long getSequence()
-    {
-        return _sequence;
-    }
+    void onGetTypes(Request req);
 
-    public boolean isPreSettled()
-    {
-        return _preSettled;
-    }
+    void onGetAttributes(Request req);
+
+    void onGetOperations(Request req);
+
+    void onGetManagementNodes(Request req);
+
+    void onRegister(Request req);
+
+    void onDeregister(Request req);
 }

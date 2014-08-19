@@ -186,7 +186,7 @@ class SessionImpl extends ContextAwareImpl implements org.splash.messaging.Sessi
 
     @Override
     public void disposition(Message msg, MessageDisposition disposition, int... flags) throws MessageFormatException,
-            MessagingException
+            MessagingException, NetworkException
     {
         switch (disposition)
         {
@@ -203,9 +203,9 @@ class SessionImpl extends ContextAwareImpl implements org.splash.messaging.Sessi
     }
 
     @Override
-    public void settle(Message msg, int... flags) throws MessageFormatException, MessagingException
+    public void settle(Message msg, int... flags) throws MessageFormatException, MessagingException, NetworkException
     {
-        settle(convertMessage(msg), flags.length == 0 ? false : (flags[0] & CUMULATIVE) != 0);
+        settle(convertMessage(msg), flags.length == 0 ? false : (flags[0] & CUMULATIVE) != 0, true);
     }
 
     @Override
@@ -263,7 +263,7 @@ class SessionImpl extends ContextAwareImpl implements org.splash.messaging.Sessi
         }
     }
 
-    void disposition(InboundMessage msg, DeliveryState state, int... flags)
+    void disposition(InboundMessage msg, DeliveryState state, int... flags) throws NetworkException
     {
         int flag = flags.length == 1 ? flags[0] : 0;
         boolean cumilative = (flag & CUMULATIVE) != 0;
@@ -284,11 +284,12 @@ class SessionImpl extends ContextAwareImpl implements org.splash.messaging.Sessi
         _lastDispositionMark.set(end);
         if (settle)
         {
-            settle(msg, cumilative);
+            settle(msg, cumilative, false);
         }
+        _conn.write();
     }
 
-    void settle(InboundMessage msg, boolean cumilative)
+    void settle(InboundMessage msg, boolean cumilative, boolean write) throws NetworkException
     {
         long count = cumilative ? _lastSettled.get() : msg.getSequence();
         long end = msg.getSequence();
@@ -308,6 +309,7 @@ class SessionImpl extends ContextAwareImpl implements org.splash.messaging.Sessi
             count++;
         }
         _lastSettled.set(end);
+        _conn.write();
     }
 
     InboundMessage convertMessage(Message msg) throws MessageFormatException, MessagingException

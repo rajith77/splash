@@ -18,13 +18,16 @@
  * under the License.
  *
  */
-package org.splash.messaging.services.management;
+package org.splash.messaging.service.management;
 
-public interface ManagementNode
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface ManageableEntityType
 {
-    String getAddress();
-
-    void registerEntity(ManageableEntity entity);
-
-    void deRegisterEntity(ManageableEntity entity);
+    String value();
 }

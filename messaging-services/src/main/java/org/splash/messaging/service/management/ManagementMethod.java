@@ -18,36 +18,16 @@
  * under the License.
  *
  */
-package org.splash.messaging.services.management;
+package org.splash.messaging.service.management;
 
-import org.splash.messaging.management.Request;
-import org.splash.messaging.management.Response;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public interface ManagementEventHandler
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface ManagementMethod
 {
-    void onRequest(Request req);
-
-    void onResponse(Response res);
-
-    void onCreate(Request req);
-
-    void onRead(Request req, ManageableEntity entity);
-
-    void onUpdate(Request req, ManageableEntity entity);
-
-    void onDelete(Request req, ManageableEntity entity);
-
-    void onQuery(Request req);
-
-    void onGetTypes(Request req);
-
-    void onGetAttributes(Request req);
-
-    void onGetOperations(Request req);
-
-    void onGetManagementNodes(Request req);
-
-    void onRegister(Request req);
-
-    void onDeregister(Request req);
+    String value();
 }

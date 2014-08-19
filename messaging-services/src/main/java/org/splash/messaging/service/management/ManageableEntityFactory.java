@@ -18,25 +18,11 @@
  * under the License.
  *
  */
-package org.splash.messaging.services;
+package org.splash.messaging.service.management;
 
-import org.splash.messaging.services.management.ManageableEntity;
+import java.util.Map;
 
-public interface Router extends ManageableEntity
+public interface ManageableEntityFactory
 {
-    public static final class Factory
-    {
-        public static Router create(String className) throws MessagingServiceException
-        {
-            try
-            {
-                Class<? extends Router> c = Class.forName(className).asSubclass(Router.class);
-                return c.newInstance();
-            }
-            catch (Exception e)
-            {
-                throw new MessagingServiceException("Unable to instantiate the router class", e);
-            }
-        }
-    }
+    ManageableEntity create(String id, String name, Map<String, Object> args) throws IllegalArgumentException;
 }

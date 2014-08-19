@@ -18,11 +18,16 @@
  * under the License.
  *
  */
-package org.splash.messaging.services.management;
+package org.splash.messaging.service.management;
 
-/**
- * Marker interface
- */
-public interface ManageableEntityType
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface ManagementAttribute
 {
+    String value();
 }

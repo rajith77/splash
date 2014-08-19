@@ -18,25 +18,20 @@
  * under the License.
  *
  */
-package org.splash.messaging.services.management;
+package org.splash.messaging.service;
 
-import java.util.Map;
+import org.splash.messaging.MessagingException;
 
-import org.splash.messaging.management.ManagementException;
-
-public interface ManageableEntity
+@SuppressWarnings("serial")
+public class MessagingServiceException extends MessagingException
 {
-    String getName();
-    
-    String getID();
-    
-    ManageableEntityType getType();
-    
-    Map<String, Object> getAttributes();
+    public MessagingServiceException(String msg, Throwable t)
+    {
+        super(msg, t);
+    }
 
-    Map<String, Object> read() throws ManagementException;
-    
-    Map<String, Object> update(Map<String, Object> attributes) throws ManagementException;
-    
-    void delete() throws ManagementException;
+    public MessagingServiceException(String msg)
+    {
+        super(msg);
+    }
 }

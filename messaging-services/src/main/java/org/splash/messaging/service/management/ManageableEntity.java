@@ -18,20 +18,23 @@
  * under the License.
  *
  */
-package org.splash.messaging.services;
+package org.splash.messaging.service.management;
 
-import org.splash.messaging.MessagingException;
+import java.util.Map;
 
-@SuppressWarnings("serial")
-public class MessagingServiceException extends MessagingException
+import org.splash.messaging.management.ManagementException;
+
+public interface ManageableEntity
 {
-    public MessagingServiceException(String msg, Throwable t)
-    {
-        super(msg, t);
-    }
+    String getName();
+    
+    String getID();
+    
+    String getType();
 
-    public MessagingServiceException(String msg)
-    {
-        super(msg);
-    }
+    Map<String, Object> read();
+    
+    Map<String, Object> update(Map<String, Object> attributes) throws IllegalArgumentException;
+    
+    void delete() throws ManagementException;
 }

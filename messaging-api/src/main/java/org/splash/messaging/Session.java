@@ -82,7 +82,7 @@ public interface Session extends ContextAware
      * @param msg
      * @param disposition
      */
-    void disposition(Message msg, MessageDisposition disposition, int... flags) throws MessageFormatException, MessagingException;
+    void disposition(Message msg, MessageDisposition disposition, int... flags) throws MessageFormatException, MessagingException,  NetworkException;
 
     /**
      * Settles the given message or all messages received up to the given
@@ -91,7 +91,7 @@ public interface Session extends ContextAware
      * @param msg
      * @param disposition
      */
-    void settle(Message msg, int... flags) throws MessageFormatException, MessagingException;
+    void settle(Message msg, int... flags) throws MessageFormatException, MessagingException, NetworkException;
 
     /**
      * Terminates the Session and free any resources associated with this

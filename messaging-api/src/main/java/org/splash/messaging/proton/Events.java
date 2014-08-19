@@ -150,7 +150,8 @@ public final class Events
 
             InboundLinkImpl inLink = (InboundLinkImpl) link.getContext();
             SessionImpl ssn = inLink.getSession();
-            MessageImpl msg = new InboundMessage(ssn.getID(), d.getTag(), ssn.getNextIncommingSequence(), pMsg);
+            MessageImpl msg = new InboundMessage(ssn.getID(), d.getTag(), ssn.getNextIncommingSequence(),
+                    d.isSettled(), pMsg);
             for (EventHandler handler : handlers)
             {
                 handler.onMessage(inLink, msg);
