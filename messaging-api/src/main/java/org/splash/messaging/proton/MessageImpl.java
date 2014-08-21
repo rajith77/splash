@@ -304,12 +304,14 @@ public class MessageImpl implements org.splash.messaging.Message
         _msg.setMessageId(messageId);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setMessageAnnotations(Map map)
     {
         _msg.setMessageAnnotations(new MessageAnnotations(map));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void setDeliveryAnnotations(Map map)
     {

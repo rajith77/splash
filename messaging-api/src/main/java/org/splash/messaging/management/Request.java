@@ -24,7 +24,11 @@ import java.util.Map;
 
 public interface Request
 {
-    OpCode getOpCode();
+    Object getMessageId();
+
+    Object getCorrelationId();
+
+    Operation getOperation();
 
     String getType();
 

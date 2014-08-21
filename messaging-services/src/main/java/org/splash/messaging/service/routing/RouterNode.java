@@ -207,6 +207,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
             router.setLink(createLink(router.getAddress()));
             _routersByAddress.put(router.getAddress(), router);
             _routersById.put(router.getID(), router);
+            _logger.info("Added new router %s", router);
         }
         else
         {
@@ -214,6 +215,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
             Router router = _routersById.get(route.getRouterId());
             route.setRouter(router);
             router.addRoute(route);
+            _logger.info("Added new route %s, for router %s", route, route.getRouter());
         }
 
     }

@@ -91,4 +91,10 @@ public class WildcardRoute extends Route
         super.update(attributes);
         return _args;
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("[pattern=%s, destination=%s]", _pattern, _dest);
+    }
 }

@@ -30,7 +30,7 @@ public interface ManagementNode extends EventHandler
     public static final class Factory
     {
         final static String className = System.getProperty("mgt_node.class",
-                "org.splash.messaging.service.management.DefaultManagementNode");
+                "org.splash.messaging.service.management.ManagementNodeImpl");
 
         public static ManagementNode create() throws MessagingServiceException
         {

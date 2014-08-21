@@ -30,7 +30,7 @@ public interface ManagementMessageFactory
     public static final class Factory
     {
         final static String className = System.getProperty("splash.management.messagefactory",
-                "org.splash.messaging.management.proton.DefaultManagementMessageFactory");
+                "org.splash.messaging.proton.management.DefaultManagementMessageFactory");
 
         public static ManagementMessageFactory create() throws MessagingServiceException
         {
@@ -49,25 +49,25 @@ public interface ManagementMessageFactory
 
     void setLocales(String locales);
 
-    Request parseRequest(Message m);
+    Request parseRequest(Message m) throws ManagementException;
 
-    Response parseResponse(Message m);
+    Response parseResponse(Message m) throws ManagementException;
 
     Message response(Request req, ResponseCode code, Map<String, ? extends Object> attributes);
 
     Message response(Request req, ResponseCode code, String desc, Map<String, ? extends Object> attributes);
 
-    Message create(String name, String type, Map<String, ? extends Object> attributes);
+    Message create(String correlationId, String name, String type, Map<String, ? extends Object> attributes);
 
-    Message updateByName(String name, String type, Map<String, ? extends Object> attributes);
+    Message updateByName(String correlationId, String name, String type, Map<String, ? extends Object> attributes);
 
-    Message updateByID(String id, String type, Map<String, ? extends Object> attributes);
+    Message updateByID(String correlationId, String id, String type, Map<String, ? extends Object> attributes);
 
-    Message readByName(String name, String type);
+    Message readByName(String correlationId, String name, String type);
 
-    Message readByID(String id, String type);
+    Message readByID(String correlationId, String id, String type);
 
-    Message deleteByName(String name, String type);
+    Message deleteByName(String correlationId, String name, String type);
 
-    Message deleteByID(String id, String type);
+    Message deleteByID(String correlationId, String id, String type);
 }

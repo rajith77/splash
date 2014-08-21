@@ -59,7 +59,7 @@ public class Messaging
         {
             Class<? extends MessagingFactory> clazz = Class.forName(
                     System.getProperty("splash.messaging.factory",
-                            "org.splash.messaging.proton.DefaultMessagingFactory"))
+                            "org.splash.messaging.proton.MessagingFactoryImpl"))
                     .asSubclass(MessagingFactory.class);
             MESSAGING_FACTORY = clazz.newInstance();
         }

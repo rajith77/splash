@@ -20,21 +20,34 @@
  */
 package org.splash.messaging.management;
 
-import java.util.Map;
-
-public interface Response
+public enum Operation
 {
-    Object getMessageId();
+    CREATE("CREATE"),
+    READ("READ"),
+    UPDATE("UPDATE"),
+    DELETE("DELETE"),
+    QUERY("QUERY"),
+    GET_TYPES("GET-TYPES"),
+    GET_ATTRIBUTES("GET-ATTRIBUTES"),
+    GET_OPERATIONS("GET-OPERATIONS"),
+    GET_MGMT_NODES("GET-MGMT-NODES"),
+    REGISTER("REGISTER"),
+    DEREGISTER("DEREGISTER");
 
-    Object getCorrelationId();
+    private String _description;
 
-    Operation getOperation();
+    Operation(String description)
+    {
+        _description = description;
+    }
 
-    ResponseCode getResponseCode();
+    public String getDesc()
+    {
+        return _description;
+    }
 
-    String getDesc();
-
-    Map<String, Object> getAppProps();
-
-    Map<String, Object> getBody();
+    public static Operation get(String code)
+    {
+        return Enum.valueOf(Operation.class, code.replace('-', '_'));
+    }
 }

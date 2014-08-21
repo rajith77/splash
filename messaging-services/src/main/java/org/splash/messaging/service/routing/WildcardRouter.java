@@ -31,7 +31,6 @@ import org.splash.messaging.Message;
 import org.splash.messaging.service.management.ManageableEntity;
 import org.splash.messaging.service.management.ManageableEntityFactory;
 import org.splash.messaging.service.management.ManageableEntityType;
-import org.splash.messaging.service.management.ManagementAttribute;
 
 @ManageableEntityType("org.splash.WildcardRouter")
 public class WildcardRouter extends Router
@@ -54,19 +53,11 @@ public class WildcardRouter extends Router
 
     static final String ROUTING_KEY_0_10 = "x-amqp-0-10.routing-key";
 
-    @ManagementAttribute("pattern")
-    protected String _pattern;
-
     protected final Map<String, RouteEntry> _routes = new HashMap<String, RouteEntry>();
 
     WildcardRouter(String id, String name, Map<String, Object> args)
     {
         super(id, name, args);
-    }
-
-    String getPattern()
-    {
-        return _pattern;
     }
 
     @Override
@@ -142,6 +133,12 @@ public class WildcardRouter extends Router
                 _routes.remove(wildcardRoute.getPattern());
             }
         }
+    }
+
+    @Override
+    public String toString()
+    {
+        return String.format("[name=%s, address=%s, alt-address=%s, type=%s]", _name, _address, _altAddress, getType());
     }
 
     class RouteEntry

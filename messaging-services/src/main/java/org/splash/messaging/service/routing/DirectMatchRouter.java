@@ -127,4 +127,10 @@ public class DirectMatchRouter extends Router
             }
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("[name=%s, address=%s, alt-address=%s, type=%s]", _name, _address, _altAddress, getType());
+    }
 }
