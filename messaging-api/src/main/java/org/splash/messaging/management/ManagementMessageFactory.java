@@ -23,7 +23,7 @@ package org.splash.messaging.management;
 import java.util.Map;
 
 import org.splash.messaging.Message;
-import org.splash.messaging.service.MessagingServiceException;
+import org.splash.messaging.MessagingException;
 
 public interface ManagementMessageFactory
 {
@@ -32,7 +32,7 @@ public interface ManagementMessageFactory
         final static String className = System.getProperty("splash.management.messagefactory",
                 "org.splash.messaging.proton.management.DefaultManagementMessageFactory");
 
-        public static ManagementMessageFactory create() throws MessagingServiceException
+        public static ManagementMessageFactory create() throws MessagingException
         {
             try
             {
@@ -42,7 +42,7 @@ public interface ManagementMessageFactory
             }
             catch (Exception e)
             {
-                throw new MessagingServiceException("Unable to instantiate the ManagementMessageFactory class", e);
+                throw new MessagingException("Unable to instantiate the ManagementMessageFactory class", e);
             }
         }
     }
