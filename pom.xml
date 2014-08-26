@@ -8,6 +8,7 @@
   <packaging>pom</packaging>
    <modules>
       <module>messaging-api</module>
+      <module>messaging-services</module>
    </modules>
 
   <name>Main Pom</name>
