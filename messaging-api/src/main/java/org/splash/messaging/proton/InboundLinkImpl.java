@@ -64,7 +64,7 @@ class InboundLinkImpl extends BaseLink implements Action, InboundLink
         Receiver receiver = (Receiver) _link;
         if (drain)
         {
-            receiver.setDrain(true);
+            //receiver.setDrain(true);
         }
         receiver.flow(credits);
         _ssn.getConnection().write();

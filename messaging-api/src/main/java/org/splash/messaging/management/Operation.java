@@ -20,6 +20,7 @@
  */
 package org.splash.messaging.management;
 
+
 public enum Operation
 {
     CREATE("CREATE"),
@@ -46,8 +47,9 @@ public enum Operation
         return _description;
     }
 
-    public static Operation get(String code)
+    public static Operation get(String code) throws ManagementException
     {
+        if (code == null) throw new  ManagementException(ResponseCode.BAD_REQUEST, "Error! operation not specified.");
         return Enum.valueOf(Operation.class, code.replace('-', '_'));
     }
 }

@@ -20,13 +20,14 @@ package org.splash.messaging.proton;
  * under the License.
  *
  */
+import java.util.HashMap;
 import java.util.Map;
 
 import org.splash.messaging.ContextAware;
 
 public abstract class ContextAwareImpl implements ContextAware
 {
-    Map<String, Object> _ctx;
+    Map<String, Object> _ctx = new HashMap<String, Object>();
 
     @Override
     public void put(String key, Object value)

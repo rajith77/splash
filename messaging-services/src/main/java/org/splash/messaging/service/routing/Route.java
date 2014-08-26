@@ -23,6 +23,7 @@ package org.splash.messaging.service.routing;
 import java.util.Map;
 
 import org.splash.messaging.management.ManagementException;
+import org.splash.messaging.management.ManagementPropertyNames;
 import org.splash.messaging.service.management.ManageableEntity;
 import org.splash.messaging.service.management.ManageableEntityType;
 import org.splash.messaging.service.management.ManagementAttribute;
@@ -32,7 +33,7 @@ public abstract class Route implements ManageableEntity
 {
     static final String DESTINATION = "destination";
 
-    static final String ROUTER_ID = "routerId";
+    static final String ROUTER_ID = "router-id";
 
     protected String _id;
 
@@ -70,8 +71,10 @@ public abstract class Route implements ManageableEntity
         }
         else
         {
-            throw new IllegalArgumentException("destination not specified");
+            throw new IllegalArgumentException("router-id not specified");
         }
+        args.put(ManagementPropertyNames.NAME, name);
+        args.put(ManagementPropertyNames.IDENTITY, id);
     }
 
     String getRouterId()

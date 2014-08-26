@@ -27,6 +27,7 @@ import org.apache.qpid.proton.engine.Link;
 import org.apache.qpid.proton.engine.Receiver;
 import org.apache.qpid.proton.engine.Sender;
 import org.apache.qpid.proton.message.Message;
+import org.splash.logging.Logger;
 import org.splash.messaging.Connection;
 import org.splash.messaging.EventHandler;
 import org.splash.messaging.InboundLink;
@@ -34,101 +35,111 @@ import org.splash.messaging.OutboundLink;
 
 public final class Events
 {
+    protected static final Logger _logger = Logger.get(Events.class);
+
     private Events()
     {
     }
 
     public static void dispatchProtonEvents(Event event, EventHandler[] handlers)
     {
-        if (handlers.length < 1)
-            return;
-        switch (event.getType())
+        try
         {
-        case CONNECTION_REMOTE_OPEN:
-            Connection con = (Connection) event.getConnection().getContext();
-            for (EventHandler handler : handlers)
+            if (handlers.length < 1)
+                return;
+            switch (event.getType())
             {
-                handler.onConnectionOpen(con);
-            }
-            break;
-        case CONNECTION_FINAL:
-            con = (Connection) event.getConnection().getContext();
-            for (EventHandler handler : handlers)
-            {
-                handler.onConnectionClosed(con);
-            }
-            break;
-        case SESSION_REMOTE_OPEN:
-            SessionImpl ssn = (SessionImpl) event.getSession().getContext();
-            for (EventHandler handler : handlers)
-            {
-                handler.onSession(ssn, ssn);
-            }
-            break;
-        case SESSION_FINAL:
-            ssn = (SessionImpl) event.getSession().getContext();
-            for (EventHandler handler : handlers)
-            {
-                handler.onSessionClosed(ssn);
-            }
-            break;
-        case LINK_REMOTE_OPEN:
-            Link link = event.getLink();
-            if (link instanceof Receiver)
-            {
-                InboundLinkImpl inboundLink = (InboundLinkImpl) link.getContext();
+            case CONNECTION_REMOTE_OPEN:
+                Connection con = (Connection) event.getConnection().getContext();
                 for (EventHandler handler : handlers)
                 {
-                    handler.onInboundLink(inboundLink, inboundLink);
+                    handler.onConnectionOpen(con);
                 }
-            }
-            else
-            {
-                OutboundLinkImpl outboundLink = (OutboundLinkImpl) link.getContext();
+                break;
+            case CONNECTION_FINAL:
+                con = (Connection) event.getConnection().getContext();
                 for (EventHandler handler : handlers)
                 {
-                    handler.onOutboundLink(outboundLink, outboundLink);
+                    handler.onConnectionClosed(con);
                 }
-            }
-            break;
-        case LINK_FLOW:
-            link = event.getLink();
-            if (link instanceof Sender)
-            {
-                OutboundLink outboundLink = (OutboundLink) link.getContext();
+                break;
+            case SESSION_REMOTE_OPEN:
+                SessionImpl ssn = (SessionImpl) event.getSession().getContext();
                 for (EventHandler handler : handlers)
                 {
-                    handler.onOutboundLinkCredit(outboundLink, link.getCredit());
+                    handler.onSession(ssn, ssn);
                 }
-            }
-            break;
-        case LINK_FINAL:
-            link = event.getLink();
-            if (link instanceof Receiver)
-            {
-                InboundLink inboundLink = (InboundLink) link.getContext();
+                break;
+            case SESSION_FINAL:
+                ssn = (SessionImpl) event.getSession().getContext();
                 for (EventHandler handler : handlers)
                 {
-                    handler.onInboundLinkClosed(inboundLink);
+                    handler.onSessionClosed(ssn);
                 }
-            }
-            else
-            {
-                OutboundLink outboundLink = (OutboundLink) link.getContext();
-                for (EventHandler handler : handlers)
+                break;
+            case LINK_REMOTE_OPEN:
+                Link link = event.getLink();
+                if (link instanceof Receiver)
                 {
-                    handler.onOutboundLinkClosed(outboundLink);
+                    InboundLinkImpl inboundLink = (InboundLinkImpl) link.getContext();
+                    for (EventHandler handler : handlers)
+                    {
+                        handler.onInboundLink(inboundLink, inboundLink);
+                    }
                 }
+                else
+                {
+                    OutboundLinkImpl outboundLink = (OutboundLinkImpl) link.getContext();
+                    for (EventHandler handler : handlers)
+                    {
+                        handler.onOutboundLink(outboundLink, outboundLink);
+                    }
+                }
+                break;
+            case LINK_FLOW:
+                link = event.getLink();
+                if (link instanceof Sender)
+                {
+                    OutboundLink outboundLink = (OutboundLink) link.getContext();
+                    for (EventHandler handler : handlers)
+                    {
+                        handler.onOutboundLinkCredit(outboundLink, link.getCredit());
+                    }
+                }
+                break;
+            case LINK_FINAL:
+                link = event.getLink();
+                if (link instanceof Receiver)
+                {
+                    InboundLink inboundLink = (InboundLink) link.getContext();
+                    for (EventHandler handler : handlers)
+                    {
+                        handler.onInboundLinkClosed(inboundLink);
+                    }
+                }
+                else
+                {
+                    OutboundLink outboundLink = (OutboundLink) link.getContext();
+                    for (EventHandler handler : handlers)
+                    {
+                        handler.onOutboundLinkClosed(outboundLink);
+                    }
+                }
+                break;
+            case TRANSPORT:
+                // TODO
+                break;
+            case DELIVERY:
+                onDelivery(event.getDelivery(), handlers);
+                break;
+            default:
+                break;
             }
-            break;
-        case TRANSPORT:
-            // TODO
-            break;
-        case DELIVERY:
-            onDelivery(event.getDelivery(), handlers);
-            break;
-        default:
-            break;
+        }
+        catch (Exception e)
+        {
+            _logger.error(e, "Error while dispatching event %s [%s]", event.getType(), event);
+            e.printStackTrace();
         }
     }
 
@@ -147,6 +158,7 @@ public final class Events
             int read = receiver.recv(bytes, 0, bytes.length);
             Message pMsg = Proton.message();
             pMsg.decode(bytes, 0, read);
+            receiver.advance();
 
             InboundLinkImpl inLink = (InboundLinkImpl) link.getContext();
             SessionImpl ssn = inLink.getSession();

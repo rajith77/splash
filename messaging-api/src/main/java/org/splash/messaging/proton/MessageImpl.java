@@ -184,13 +184,16 @@ public class MessageImpl implements org.splash.messaging.Message
     {
         if (_content == null)
         {
-            if (_msg.getBody() instanceof Data)
+            if (_msg.getBody() != null)
             {
-                _content = ((Data) _msg.getBody()).getValue().asByteBuffer();
-            }
-            else
-            {
-                _content = ((AmqpValue) _msg.getBody()).getValue();
+                if (_msg.getBody() instanceof Data)
+                {
+                    _content = ((Data) _msg.getBody()).getValue().asByteBuffer();
+                }
+                else
+                {
+                    _content = ((AmqpValue) _msg.getBody()).getValue();
+                }
             }
         }
         return _content;

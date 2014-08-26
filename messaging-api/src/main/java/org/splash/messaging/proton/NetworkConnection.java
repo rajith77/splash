@@ -97,7 +97,6 @@ public class NetworkConnection implements Runnable
 
         _receiver = receiver;
         _receiverThread = new Thread(this);
-        _receiverThread.start();
     }
 
     public void send(ByteBuffer buf) throws IOException
@@ -107,6 +106,11 @@ public class NetworkConnection implements Runnable
             throw new RuntimeException("Connection is closed");
         }
         _out.write(buf);
+    }
+
+    public void start()
+    {
+        _receiverThread.start();
     }
 
     public void run()

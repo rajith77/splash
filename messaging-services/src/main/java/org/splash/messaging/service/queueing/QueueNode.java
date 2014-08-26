@@ -18,27 +18,9 @@
  * under the License.
  *
  */
-package org.splash.messaging.management;
+package org.splash.messaging.service.queueing;
 
-import java.util.Map;
-
-public interface Request
+public class QueueNode
 {
-    Object getMessageId();
 
-    String getReplyTo();
-
-    Object getCorrelationId();
-
-    Operation getOperation();
-
-    String getType();
-
-    String getName();
-
-    String getId();
-
-    Map<String, Object> getAppProps();
-
-    Map<String, Object> getBody();
 }

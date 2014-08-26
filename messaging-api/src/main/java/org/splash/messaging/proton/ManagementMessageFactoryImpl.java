@@ -23,6 +23,7 @@ package org.splash.messaging.proton;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.qpid.proton.amqp.UnsignedInteger;
 import org.splash.messaging.Message;
 import org.splash.messaging.management.ManagementException;
 import org.splash.messaging.management.ManagementMessageFactory;
@@ -54,6 +55,8 @@ public class ManagementMessageFactoryImpl implements ManagementMessageFactory
 
             Object _correlationId = m.getCorrelationId();
 
+            String _replyTo = m.getReplyTo();
+
             Operation _opCode = Operation.get((String) _props.get(ManagementPropertyNames.OP));
 
             String _type = (String) _props.get(ManagementPropertyNames.TYPE);
@@ -68,6 +71,12 @@ public class ManagementMessageFactoryImpl implements ManagementMessageFactory
             public Object getMessageId()
             {
                 return _msgId;
+            }
+
+            @Override
+            public String getReplyTo()
+            {
+                return _replyTo;
             }
 
             @Override
@@ -123,17 +132,20 @@ public class ManagementMessageFactoryImpl implements ManagementMessageFactory
         {
             Map<String, Object> _props = m.getApplicationProperties();
 
-            Operation _opCode = Operation.get((String) _props.get(ManagementPropertyNames.OP));
+            Operation _opCode = _props.containsKey(ManagementPropertyNames.OP) ? Operation.get((String) _props
+                    .get(ManagementPropertyNames.OP)) : null;
 
             Object _msgId = m.getMessageId();
 
             Object _correlationId = m.getCorrelationId();
 
-            ResponseCode _resCode = ResponseCode.get((Integer) _props.get(ManagementPropertyNames.STATUS_CODE));
+            ResponseCode _resCode = _props.get(ManagementPropertyNames.STATUS_CODE) instanceof UnsignedInteger ? 
+                    ResponseCode.get(((UnsignedInteger) _props.get(ManagementPropertyNames.STATUS_CODE)).intValue()) : 
+                    ResponseCode.get((Integer) _props.get(ManagementPropertyNames.STATUS_CODE));
 
             String _desc = (String) _props.get(ManagementPropertyNames.STATUS_DESC);
 
-            Map<String, Object> _args = (Map<String, Object>) m.getContent();
+            Map<String, Object> _args = m.getContent() == null ? null : (Map<String, Object>) m.getContent();
 
             @Override
             public Object getMessageId()
@@ -190,13 +202,17 @@ public class ManagementMessageFactoryImpl implements ManagementMessageFactory
     public Message response(Request req, ResponseCode code, String desc, Map<String, ? extends Object> attributes)
     {
         Message msg = new MessageImpl();
+        msg.setAddress(req.getReplyTo());
         msg.setCorrelationId(req.getCorrelationId() == null ? req.getMessageId() : req.getCorrelationId());
         Map<String, Object> props = new HashMap<String, Object>();
         props.put(ManagementPropertyNames.STATUS_CODE, code.getCode());
         props.put(ManagementPropertyNames.STATUS_DESC, desc == null ? code.getDesc() : code.getDesc() + ":" + desc);
         props.put(ManagementPropertyNames.OP, req.getOperation().getDesc());
         msg.setApplicationProperties(props);
-        msg.setContent(attributes);
+        if (attributes != null)
+        {
+            msg.setContent(attributes);
+        }
         return msg;
     }
 

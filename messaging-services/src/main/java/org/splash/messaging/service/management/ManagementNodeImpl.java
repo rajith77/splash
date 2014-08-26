@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.splash.logging.Logger;
 import org.splash.messaging.InboundLink;
 import org.splash.messaging.Message;
+import org.splash.messaging.MessagingException;
 import org.splash.messaging.OutboundLink;
 import org.splash.messaging.management.ManagementException;
 import org.splash.messaging.management.ManagementMessageFactory;
@@ -93,7 +94,14 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
     {
         _inLink = inLink;
         _outLink = outLink;
-        _msgFactory = ManagementMessageFactory.Factory.create();
+        try
+        {
+            _msgFactory = ManagementMessageFactory.Factory.create();
+        }
+        catch (MessagingException e)
+        {
+            throw new MessagingServiceException("Error loading ManagementMessageFactory", e);
+        }
         _mgtEventHandlers = handlers == null ? new ManagementEventHandler[0] : handlers;
         _lifeCycleHandler = lifeCycleHandler;
     }
@@ -134,7 +142,8 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
                 catch (ManagementException e)
                 {
                     _logger.error(e, "Error parsing management request msg %s", msg);
-                    // TODO need to respond with a bad request status code
+                    Message res = _msgFactory.response(req, e.getCode(), e.getMessage(), null);
+                    send(res);
                     return;
                 }
                 onRequest(req);
@@ -224,7 +233,7 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
     @Override
     public void onCreate(Request req)
     {
-        String type = (String) req.getAppProps().get(ManagementPropertyNames.TYPE);
+        String type = req.getType();
 
         if (_typeRegistry.containsKey(type))
         {
@@ -357,7 +366,8 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
     public void onGetTypes(Request req)
     {
         Map<String, List<String>> results = new HashMap<String, List<String>>();
-        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE))
+        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE)
+                && !((String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE)).isEmpty())
         {
             String givenTypeName = (String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE);
             if (_typeRegistry.containsKey(givenTypeName))
@@ -375,9 +385,8 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
         {
             for (String typeName : _typeRegistry.keySet())
             {
-                Class<?> givenClass = _typeRegistry.get(typeName).type();
                 List<String> superTypes = new ArrayList<String>();
-                for (Class<?> superType : _typeRegistry.get(givenClass).getSuperTypes())
+                for (Class<?> superType : _typeRegistry.get(typeName).getSuperTypes())
                 {
                     String superTypeName = superType.getAnnotation(ManageableEntityType.class).value();
                     superTypes.add(superTypeName);
@@ -398,7 +407,8 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
     public void onGetAttributes(Request req)
     {
         Map<String, List<String>> results = new HashMap<String, List<String>>();
-        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE))
+        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE)
+                && !((String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE)).isEmpty())
         {
             String givenTypeName = (String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE);
             if (_typeRegistry.containsKey(givenTypeName))
@@ -440,7 +450,8 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
     public void onGetOperations(Request req)
     {
         Map<String, List<String>> results = new HashMap<String, List<String>>();
-        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE))
+        if (req.getAppProps().containsKey(ManagementPropertyNames.ENTITY_TYPE)
+                && !((String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE)).isEmpty())
         {
             String givenTypeName = (String) req.getAppProps().get(ManagementPropertyNames.ENTITY_TYPE);
             if (_typeRegistry.containsKey(givenTypeName))
@@ -534,11 +545,12 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
         _typeRegistry.put(typeName, entry);
     }
 
-    void addEntityToTypeRegistry(Class<?> mainType, ManageableEntity entity)
+    void addEntityToTypeRegistry(Class<?> clazz, ManageableEntity entity)
     {
         List<Class<?>> types = new ArrayList<Class<?>>();
-        types.add(mainType);
-        types.addAll(_typeRegistry.get(mainType.getName()).getSuperTypes());
+        String mainType = clazz.getAnnotation(ManageableEntityType.class).value();
+        types.add(clazz);
+        types.addAll(_typeRegistry.get(mainType).getSuperTypes());
 
         for (Class<?> type : types)
         {
@@ -551,16 +563,17 @@ public class ManagementNodeImpl extends AbstractManagementEventHandler implement
             {
                 TypeToEntityEntry entry = new TypeToEntityEntry(typeName);
                 entry.addEnitity(entity);
-                _typeToEntity.put(type.getName(), entry);
+                _typeToEntity.put(typeName, entry);
             }
         }
     }
 
-    void removeEntityFromTypeRegistry(Class<?> mainType, ManageableEntity entity)
+    void removeEntityFromTypeRegistry(Class<?> clazz, ManageableEntity entity)
     {
         List<Class<?>> types = new ArrayList<Class<?>>();
-        types.add(mainType);
-        types.addAll(_typeRegistry.get(mainType.getName()).getSuperTypes());
+        String mainType = clazz.getAnnotation(ManageableEntityType.class).value();
+        types.add(clazz);
+        types.addAll(_typeRegistry.get(mainType).getSuperTypes());
 
         for (Class<?> type : types)
         {

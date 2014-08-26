@@ -118,7 +118,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
     @Override
     public void onSettled(Tracker tracker)
     {
-        Message msg = (Message) tracker.get("INBOUND_MSG");
+        /*Message msg = (Message) tracker.get("INBOUND_MSG");
         try
         {
             _ssn.settle(msg);
@@ -130,7 +130,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
         catch (MessagingException e)
         {
             _logger.warn(e, "Exception when settling message");
-        }
+        }*/
     }
 
     @Override
@@ -138,13 +138,14 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
     {
         if (link.equals(_mgtLink))
         {
-            super.onMessage(link, msg);
+            _mgtNode.onMessage(link, msg);
         }
         else
         {
             if (_routersByAddress.containsKey(msg.getAddress()))
             {
                 List<String> addrList = _routersByAddress.get(msg.getAddress()).route(msg);
+                msg.getMessageAnnotations().remove("x-opt-qd.trace");
                 for (String addr : addrList)
                 {
                     send(addr, msg);
@@ -240,7 +241,7 @@ public class RouterNode extends AbstractEventHandler implements ManageableEntity
     {
         String host = System.getProperty("router.peer_host", "localhost");
         int port = Integer.getInteger("router.peer_port", 5672);
-        String routerMgtAddress = System.getProperty("router.mgt_address", "SPLASH_ROUTER");
+        String routerMgtAddress = System.getProperty("router.mgt_address", "SPLASH_ROUTER_NODE");
         String routerDlqAddress = System.getProperty("router.dlq_address", "SPLASH_DLQ");
         int capacity = Integer.getInteger("router.capacity", 5000);
 

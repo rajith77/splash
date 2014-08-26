@@ -26,6 +26,7 @@ import java.util.Map;
 import org.splash.messaging.InboundLink;
 import org.splash.messaging.Message;
 import org.splash.messaging.management.ManagementException;
+import org.splash.messaging.management.ManagementPropertyNames;
 import org.splash.messaging.management.ResponseCode;
 import org.splash.messaging.service.management.ManageableEntity;
 import org.splash.messaging.service.management.ManageableEntityType;
@@ -63,12 +64,14 @@ public abstract class Router implements ManageableEntity
         }
         else
         {
-            throw new IllegalArgumentException("address not specified");
+            throw new IllegalArgumentException("Router address not specified");
         }
         if (args.containsKey(ALTERNATE_ADDRESS))
         {
             _altAddress = (String) args.get(ALTERNATE_ADDRESS);
         }
+        args.put(ManagementPropertyNames.NAME, name);
+        args.put(ManagementPropertyNames.IDENTITY, id);
     }
 
     String getAddress()

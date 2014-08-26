@@ -30,7 +30,7 @@ public interface ManagementMessageFactory
     public static final class Factory
     {
         final static String className = System.getProperty("splash.management.messagefactory",
-                "org.splash.messaging.proton.management.DefaultManagementMessageFactory");
+                "org.splash.messaging.proton.ManagementMessageFactoryImpl");
 
         public static ManagementMessageFactory create() throws MessagingException
         {
